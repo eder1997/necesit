@@ -1,0 +1,93 @@
+/*estructurA GENERAL DE LAS PAGINAS */
+body{
+  text-align: center;
+  margin: 0;
+  font-family: sans-serif;
+}
+
+
+header{
+  width: 100%
+  background:#4E94AB;
+}
+#btn-menu{
+  display: none;
+}
+header label {
+  display: none;
+  width: 30px;
+  height: 30px;
+  padding: 10px;
+  border-right: 1px solid #bbbb;
+}
+#desarrolladores{
+  text-align: center;
+  
+}
+header label:hover{
+  cursor: pointer;
+  background: rgba(0,0,0,0.3);
+}
+.menu ul {
+  margin: 0;
+  list-style: none;
+  padding: 0;
+  display: flex;                    
+}
+/*.menu li { /*la raya de separacion entre boton de enlaces
+  border-color: #6c63c3;
+ border-right: 1px solid;
+}*/
+#encabezado{
+  font-size: 10rem;
+  text-align:center;
+  color:#6c63c3;
+  font-size: medium;
+  text-shadow:  3px 2px 3px black;
+  background-color: #6c63c3a6;
+}
+.active{/* COLOR DE FONDO DE CADA BOTON DE ENLACE DE PANTALLAS*/
+  color:#cccccc8a;
+}
+.menu li :hover {
+background:  #eae2e2fa;
+}
+
+.menu li a{
+display: block;
+padding: 15px 20px;
+color: #6c63c3;/*color de letra de los menus*/
+text-decoration: none;
+}
+#divtrabajo{
+  width:800px;
+  height:600px;
+  background-color:#eeeeee;
+}
+
+
+footer {
+  background-color: #6c63c3;
+  position: fixed;
+  text-align: center;
+  bottom: 0;
+  width: 100%;
+  height: 40px;
+  color: white;
+}
+}
+/*#menu{
+  margin-left: 60px; /*ubica la barra de herramientas con borde izquierdo*/
+  /*margin-top: 6px;  /*distancia de una barra a otra
+} */
+#Tsection {
+  width:822px;
+  height:500px;
+}
+#div-menu{
+   width:820px;
+  height:485px;
+}
+#menu{
+font-size: 1rem;
+}
