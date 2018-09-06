@@ -8,6 +8,8 @@ include("conexion.php");
 
 	if ($resultado) {
 		echo "Inserccion exitosa";
+				header("location: necesit.php?p=listaCategoria"); //con esta linea me llevara directo a mi lista 
+
 	}else {
 
 			echo "Inserccion fAllida";

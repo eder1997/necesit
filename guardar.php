@@ -16,6 +16,8 @@ include("conexion.php");
 
 	if ($resultado) {
 		echo "Inserccion exitosa";
+		header("location: necesit.php?p=listaUsuario"); //con esta linea me llevara directo a mi lista de usuarios registrados
+
 	}else {
 
 			echo "Inserccion fAllida";

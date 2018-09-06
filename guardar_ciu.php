@@ -8,9 +8,9 @@ include("conexion.php");
 	$resultado= $conexion-> query($query);
 
 	if ($resultado) {
-		echo "Inserccion exitosa";   ?>
+		echo "Inserccion exitosa";
+						header("location: necesit.php?p=listaCiudad"); //con esta linea me llevara directo a mi lista 
 
-		<?php
 	}else {
 
 			echo "Inserccion fAllida";

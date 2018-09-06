@@ -4,7 +4,7 @@ include("conexion.php");
 	$documento= $_POST['documento'];
 	$descripcion= $_POST['descripcion'];
 
-	$query="INSERT INTO tb_trabajador(tra_documento,tra_descripcion)VALUES('$documento','$descripcion')";
+	$query="INSERT INTO tb_trabajador(tra_documento,tra_descripcion) VALUES('$documento','$descripcion')";
 	$resultado= $conexion-> query($query);
 
 	if ($resultado) {
