@@ -12,7 +12,9 @@ if(isset($_GET['p'])){
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
-  <title>Necesit V1.6</title>
+    <script src="jquery-1.3.2.min.js" type="text/javascript"></script>   
+
+  <title>Necesit V1.8</title>
 
   <!-- CSS  -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -21,16 +23,15 @@ if(isset($_GET['p'])){
 </head>
 
 <body background="img/fondo2.jpg" class="container">  <!-- imagen de fomndo de nuestro proyecto -->
-  <nav class="deep-purple lighten-1" role="navigation"> <!--aca se coloca la clase con el color al footer de arriba fijo-->
+  <nav class="deep-purple lighten-1" role="navigation" > <!--aca se coloca la clase con el color al footer de arriba fijo-->
 <!--     <div class="nav-wrapper logo-container"><a id="logo-container" href="#" class="brand-logo" >Necesit</a>
  -->      <ul class="right hide-on-med-and-down">
-        <li><a href="#"></a></li>
 		<li <?php if ($pagina == 'inicio')echo 'class="active"'?>><a href="necesit.php?p=inicio">Inicio</a></li>
 		<li  <?php if ($pagina == 'servicio')echo 'class="active"'?>><a href="necesit.php?p=servicio">Solicitar Servicio</a></li>
 		<li  <?php if ($pagina == 'registrar')echo 'class="active"'?>><a href="necesit.php?p=registrar">Registrar</a></li>
 		<li  <?php if ($pagina == 'informes')echo 'class="active"'?>><a href="necesit.php?p=informes">Listado e informes</a></li>
-	<li  <?php if ($pagina == 'confUsu')echo 'class="active"'?>><a href="necesit.php?p=confUsu">Configuración del Usuario</a></li>
-	<li  <?php if ($pagina == 'confSist')echo 'class="active"'?>><a href="necesit.php?p=confSist">Configuración del Sistema</a></li>
+	<li  <?php if ($pagina == 'confUsu')echo 'class="active"'?>><a href="necesit.php?p=confUsu">Config. del Usuario</a></li>
+	<li  <?php if ($pagina == 'confSist')echo 'class="active"'?>><a href="necesit.php?p=confSist">Config. del Sistema</a></li>
 	
       </ul>
 
@@ -59,6 +60,9 @@ if(isset($_GET['p'])){
 			<div class="card-panel blue lighten-4 ">
 		<h2 class="blue-text text-darken-2">Bienvenidos al inicio de Necesit </h2>
 		</div>
+
+		<table bgcolor="#BBDEFB">
+			<th>
 		<p><br>
 			<br>
 			<br>
@@ -67,7 +71,12 @@ if(isset($_GET['p'])){
 		<br> 
 		<br>  
 		<br>   
-		<br></p>				
+		<br></p>
+		</th>
+	</table>		
+
+
+
 			<?php
 				break;
 				case 'servicio':
@@ -76,29 +85,56 @@ if(isset($_GET['p'])){
 					<div id="formulario">
 		<div class="wrapper"> 
  <div class="row">
- <form  action="guardar.php"  method="POST" class="col s12">
+ 	<?php 
+	include("conexion.php");
+
+	$query="SELECT * FROM tb_usuario";
+	$resultado= $conexion->query($query);
+	
+	$usuarios = array();
+	while ($columna = $resultado->fetch_assoc()) {
+		$usuarios[] = $columna;
+	}
+
+	$query="SELECT * FROM tb_trabajador ";
+	$resultado= $conexion->query($query);
+	
+	$trabajadores = array();
+	while ($columna = $resultado->fetch_assoc()) {
+		$trabajadores[] = $columna;
+	}
+	?>
+ <form  action="guardarServicio.php"  method="POST" class="col s12">
  <h3>Solicitud de Servicio.</h3> 
 <div class="col s6">
+	<div class="input-field col s12">
+		<select name="usuario"> <option disabled selected>Seleccione Nombre</option>
+			<?php 
+			foreach ($usuarios as $usuario) {
+				echo '<option value="'.$usuario['usu_id'].'">'.$usuario['usu_nombre'].'</option>';
+			}
+			?>
+		</select>
+
+		<select name="trabajador"> <option disabled selected">Seleccione un Trabajador</option>
+			<?php 
+			foreach ($trabajadores as $trabajador) {
+				echo '<option value="'.$trabajador['tra_id'].'">'.$trabajador['tra_documento'].'</option>';
+			}
+			?>
+		</select>
+	</div>
  <label>
- <input type="text" placeholder="Usuario" name="usu_id" id="usu_id"  required autofocus="">
- </label>
-  <label>
-<input type="text" placeholder="Trabajador" name="tra_id" id="tra_id" required >
- </label>
- <label>
- <input type="tel" placeholder="Observaciones" name="Observaciones" id="" required>
- </label>
- <label>
+ <input type="tel" placeholder="Observaciones" name="sol_observacion" id="" required>
       </div>
     </div>
     </div>
-  </form>
- <label>
- <input type="submit"value="Enviar" class="">
- </form>
+   	<label>
+ 		<input type="submit"value="Solicitar" >
+	 </form>
+ 		</div>
+ 	</div>
  </div>
- </div>
-			 </div>
 
 			
 			<?php
@@ -214,14 +250,12 @@ if(isset($_GET['p'])){
  </div>
  </div>
 			 </div>
-
-
-<!-- _----------------INICIA LISTA DE CIUDADES_-------------------------- -->
 		          	</table>
-					<?php
-					break;
-					case 'categoria':
-						# code...
+
+				<?php
+				break;
+				case 'categoria':
+					# code...
 
 	 ?>
 	 		<div id="formulario">
@@ -242,21 +276,49 @@ if(isset($_GET['p'])){
 	 <?php
 		break;
 			case 'trabajador':
-				# code...
+			include("conexion.php");
+
 				 ?>
-				 	<div id="formulario">
+				 	<div class="col s6" id="formulario">
 		<div class="wrapper"> 
- <div id="formulariocontacto">
- <form  action="guardar_trabajador.php"  method="POST">
- <h3>Datos del Trabajador.</h3> 
- <label>
- <input type="text" placeholder="Documento del Trabajador" name="documento" id="documento"required autofocus="">
+
+ <div class="col s6">
+ 	<?php 
+	include("conexion.php");
+
+	$query="SELECT * FROM tb_usuario";
+	$resultado= $conexion->query($query);
+	
+	$usuarios = array();
+	while ($columna = $resultado->fetch_assoc()) {
+		$usuarios[] = $columna;
+	} ?>
+ <form action="guardar_trabajador.php"  method="POST" class="s12">
+ <h3>Prueba de Usuario; complete los datos.</h3> 
+ <div class="container">
+ 	<div class="input-field col s12">
+		<select name="usuario">
+			<?php 
+			foreach ($usuarios as $usuario) {
+				echo '<option value="'.$usuario['usu_id'].'">'.$usuario['usu_nombre'].'</option>';
+			}
+			?>
+		</select>
+</div>
+ <div class="s6">
+  </div>
+  <br>
+
+ <label >
+ <input type="text" placeholder="Doc Trabajador" name="documento" id="documento"required autofocus="">
 	 </label>
-<label  ><!--el TD sirve para dejar en columnas el elemento  -->
-	<br>
 	<textarea  rows="4" name="descripcion" id="descripcion" ></textarea>
 		</label>
+		
 				 <input type="submit"value="Guardar">
+				 </div>
+				 </div>
+				
 		 </form>
 	 </div>
  </div>
@@ -273,8 +335,8 @@ if(isset($_GET['p'])){
 	<li  <?php if ($pagina == 'listaUsuario')echo 'class="active"'?>><a href="necesit.php?p=listaUsuario">Listados de Usuarios</a></li>
 		<li  <?php if ($pagina == 'listaCategoria')echo 'class="active"'?>><a href="necesit.php?p=listaCategoria"> Listado de Categoria</a>
 		</li>
-		<li  <?php if ($pagina == 'informeServicios')echo 'class="active"'?>><a href="necesit.php?p=listaCiudad">Ciudades</a></li>
-		<li  <?php if ($pagina == 'listaTrabajador')echo 'class="active"'?>><a href="necesit.php?p=listaTrabajador">Informe de servicios</a></li>
+		<li  <?php if ($pagina == 'listaCiudad')echo 'class="active"'?>><a href="necesit.php?p=listaCiudad">Ciudades</a></li>
+		<li  <?php if ($pagina == 'informeServicios')echo 'class="active"'?>><a href="necesit.php?p=informeServicios">Informe de servicios</a></li>
 		</ul>
 	</nav> 
 
@@ -289,7 +351,7 @@ if(isset($_GET['p'])){
 <li  <?php if ($pagina == 'listaTrabajador')echo 'class="active"'?>><a href="necesit.php?p=listaTrabajador">Listados de Trabajador</a></li>
 	<li  <?php if ($pagina == 'listaUsuario')echo 'class="active"'?>><a href="necesit.php?p=listaUsuario">Listados de Usuarios</a></li>
 		<li  <?php if ($pagina == 'listaCategoria')echo 'class="active"'?>><a href="necesit.php?p=listaCategoria"> Listado de Categoria</a></li>
-		<li  <?php if ($pagina == 'informeServicios')echo 'class="active"'?>><a href="necesit.php?p=listaCiudad">Ciudades</a></li>
+		<li  <?php if ($pagina == 'listaCiudad')echo 'class="active"'?>><a href="necesit.php?p=listaCiudad">Ciudades</a></li>
 		<li  <?php if ($pagina == 'informeServicios')echo 'class="active"'?>><a href="necesit.php?p=informeServicios">Informe de servicios</a></li>
 		</ul>
 	</nav> 
@@ -348,7 +410,7 @@ if(isset($_GET['p'])){
 <li  <?php if ($pagina == 'listaTrabajador')echo 'class="active"'?>><a href="necesit.php?p=listaTrabajador">Listados de Trabajador</a></li>
 	<li  <?php if ($pagina == 'listaUsuario')echo 'class="active"'?>><a href="necesit.php?p=listaUsuario">Listados de Usuarios</a></li>
 		<li  <?php if ($pagina == 'listaCategoria')echo 'class="active"'?>><a href="necesit.php?p=listaCategoria"> Listado de Categoria</a></li>
-		<li  <?php if ($pagina == 'informeServicios')echo 'class="active"'?>><a href="necesit.php?p=listaCiudad">Ciudades</a></li>
+		<li  <?php if ($pagina == 'listaCiudad')echo 'class="active"'?>><a href="necesit.php?p=listaCiudad">Ciudades</a></li>
 		<li  <?php if ($pagina == 'informeServicios')echo 'class="active"'?>><a href="necesit.php?p=informeServicios">Informe de servicios</a></li>
 		</ul>
 	</nav> 
@@ -369,8 +431,8 @@ if(isset($_GET['p'])){
 				<td>Apellido &nbsp &nbsp</td> <!-- el &nbsp sirve para dar espacio en blanco a mismas lineas -->
 				<td>Celular &nbsp&nbsp</td> <!-- el &nbsp sirve para dar espacio en blanco a mismas lineas -->
 				<td>Email &nbsp&nbsp</td> <!-- el &nbsp sirve para dar espacio en blanco a mismas lineas -->
-				<td>Fecha Nac. &nbsp</td> <!-- el &nbsp sirve para dar espacio en blanco a mismas lineas -->
-				<td>Barrio &nbsp</td> <!-- el &nbsp sirve para dar espacio en blanco a mismas lineas -->
+<!-- 				<td>Fecha Nac. &nbsp</td> el &nbsp sirve para dar espacio en blanco a mismas lineas
+ -->				<td>Barrio &nbsp</td> <!-- el &nbsp sirve para dar espacio en blanco a mismas lineas -->
 				<td>Direccion &nbsp</td> <!--Estas leyendo esto con la mente ;v  Nieguen melo -->
 				<td>Fecha de Inscripcion &nbsp</td>
 				<td colspan="2" rowspan="1">Opciones</td>
@@ -390,8 +452,8 @@ if(isset($_GET['p'])){
 				 	<td><?php echo $row['usu_apellido']; ?></td>
 				 	<td><?php echo $row['usu_celular']; ?></td> 	
 				 	<td><?php echo $row['usu_correo_electronico']; ?></td>
-				 	<td><?php echo $row['usu_fecha_nacimiento']; ?></td>
-				 	<td><?php echo $row['usu_barrio']; ?></td>
+<!-- 				 	<td><?php echo $row['usu_fecha_nacimiento']; ?></td>
+ -->				 	<td><?php echo $row['usu_barrio']; ?></td>
 				 	<td><?php echo $row['usu_direccion']; ?></td>
 				 	<td><?php echo $row['usu_fecha_inscripcion']; ?></td>
 				 	<td><a href="modificar.php?id=<?php echo $row['usu_id']; ?>">Modificar</a></td>
@@ -405,10 +467,68 @@ if(isset($_GET['p'])){
 	</table>
 
 
+	 <?php
+				break;
+				case 'informeServicios':
+			# code...
+		 ?>
+		 		<div><h3>Informes y registros de ultimos servicios</h3></div> 
+	<nav >
+		<ul class="nav nav-tabs">
+<li  <?php if ($pagina == 'listaTrabajador')echo 'class="active"'?>><a href="necesit.php?p=listaTrabajador">Listados de Trabajador</a></li>
+	<li  <?php if ($pagina == 'listaUsuario')echo 'class="active"'?>><a href="necesit.php?p=listaUsuario">Listados de Usuarios</a></li>
+		<li  <?php if ($pagina == 'listaCategoria')echo 'class="active"'?>><a href="necesit.php?p=listaCategoria"> Listado de Categoria</a></li>
+		<li  <?php if ($pagina == 'listaCiudad')echo 'class="active"'?>><a href="necesit.php?p=listaCiudad">Ciudades</a></li>
+		<li  <?php if ($pagina == 'informeServicios')echo 'class="active"'?>><a href="necesit.php?p=informeServicios">Informe de servicios</a></li>
+		</ul>
+	</nav> 
+	<table border="3" id="tabla-categoria">
+		<thead>
 
+			<tr> <!--filasss -->
+
+			<th rowspan="">Lista de Servicios</th>   <!--Columnas -->
+			</tr>
+			
+		</thead>
+		<tbody>
+			<tr>
+				<td>Servicio N°</td> 
+				<td> &nbsp&nbsp Usuario</td> <!--el &nbsp sirve para darespacio enblanco a mismas lineas -->
+
+				<td> &nbsp&nbsp Fecha inicio</td> <!-- el &nbsp sirve para dar espacio en blanco a mismas lineas -->
+				<td> &nbsp&nbsp Trabajador</td> <!-- el &nbsp sirve para dar espacio en blanco a mismas lineas -->
+
+				<td>Estado</td> <!-- el &nbsp sirve para dar espacio en blanco a mismas lineas -->
+				<td>Observaciones</td>
+				
+			</tr> 
+			<?php 
+			INCLUDE("conexion.php");
+
+			$query="SELECT * FROM tb_solicitud_servicio";
+			$resultado= $conexion->query($query);
+			while ($row=$resultado->fetch_assoc()) {
+				# code...
+				 ?>
+				 <tr>
+				 	<td><?php echo $row['sol_id']; ?></td>
+				 	<td><?php echo $row['usu_id']; ?></td>
+
+				 	<td><?php echo $row['sol_fecha_inicio']; ?></td>
+				 	<td><?php echo $row['tra_id']; ?></td>
+
+				 	<td><?php echo $row['sol_estado']; ?>activo</td>
+				 	<td><?php echo $row['sol_observacion']; ?></td>
+
+				 	<td><a href="modificarSolicitud1.php?id=<?php echo $row['sol_id'];?>">Modificar</a></td>	
+<!-- ----------------------------fin listado Informes y 
+	servicios-------------------------------------------->
 
 
 	 <?php
+	   } // ----cerrar siempre la llave  del while para los listados 
+
 				break;
 				case 'listaCategoria':
 			# code...
@@ -419,7 +539,7 @@ if(isset($_GET['p'])){
 <li  <?php if ($pagina == 'listaTrabajador')echo 'class="active"'?>><a href="necesit.php?p=listaTrabajador">Listados de Trabajador</a></li>
 	<li  <?php if ($pagina == 'listaUsuario')echo 'class="active"'?>><a href="necesit.php?p=listaUsuario">Listados de Usuarios</a></li>
 		<li  <?php if ($pagina == 'listaCategoria')echo 'class="active"'?>><a href="necesit.php?p=listaCategoria"> Listado de Categoria</a></li>
-		<li  <?php if ($pagina == 'informeServicios')echo 'class="active"'?>><a href="necesit.php?p=listaCiudad">Ciudades</a></li>
+		<li  <?php if ($pagina == 'listaCiudad')echo 'class="active"'?>><a href="necesit.php?p=listaCiudad">Ciudades</a></li>
 		<li  <?php if ($pagina == 'informeServicios')echo 'class="active"'?>><a href="necesit.php?p=informeServicios">Informe de servicios</a></li>
 		</ul>
 	</nav> 
@@ -502,9 +622,9 @@ if(isset($_GET['p'])){
       </div>
     </div>
     <div class="footer-copyright">
-      <div class="container">
+    <!--   <div class="container">
       Made by <a class="orange-text text-lighten-3" href="#">Mucho amor y cariño</a>
-      </div>
+      </div> -->
     </div>
   </footer>
 
@@ -513,6 +633,9 @@ if(isset($_GET['p'])){
   <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
   <script src="js/materialize.js"></script>
   <script src="js/init.js"></script>
+  <script > $(document).ready(function(){
+    $('select').formSelect();
+  });</script>
 
   </body>
 </html>
