@@ -1,8 +1,8 @@
 <?php 
 include("conexion.php");
 
-	$usu_id= $_POST['usu_id'];
-	$tra_id= $_POST['tra_id'];
+	$usu_id= $_POST['usuario'];
+	$tra_id= $_POST['trabajador'];
 	$sol_observacion= $_POST['sol_observacion'];
 
 
